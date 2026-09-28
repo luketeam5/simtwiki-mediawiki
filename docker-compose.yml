@@ -1,0 +1,64 @@
+services:
+  mediawiki:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: simtwiki-mediawiki
+
+    restart: unless-stopped
+
+    ports:
+      - "8080:80"
+
+    depends_on:
+      database:
+        condition: service_healthy
+
+    volumes:
+      # Uploaded files
+      - mediawiki_images:/var/www/html/images
+
+      # Add this AFTER completing the initial MediaWiki installer.
+      # - /opt/simtwiki/LocalSettings.php:/var/www/html/LocalSettings.php:ro
+
+    networks:
+      - mediawiki
+
+  database:
+    image: mariadb:11.4
+
+    container_name: simtwiki-database
+
+    restart: unless-stopped
+
+    environment:
+      MARIADB_DATABASE: mediawiki
+      MARIADB_USER: mediawiki
+      MARIADB_PASSWORD: CHANGE_ME
+      MARIADB_ROOT_PASSWORD: CHANGE_ME_TOO
+
+    volumes:
+      - mediawiki_database:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - mediawiki
+
+volumes:
+  mediawiki_images:
+  mediawiki_database:
+
+networks:
+  mediawiki:
