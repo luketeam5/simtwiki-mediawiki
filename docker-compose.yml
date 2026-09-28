@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "8080:80"
+      - "${MEDIAWIKI_PORT:-8080}:80"
 
     depends_on:
       database:
@@ -33,10 +33,10 @@ services:
     restart: unless-stopped
 
     environment:
-      MARIADB_DATABASE: mediawiki
-      MARIADB_USER: mediawiki
-      MARIADB_PASSWORD: CHANGE_ME
-      MARIADB_ROOT_PASSWORD: CHANGE_ME_TOO
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
 
     volumes:
       - mediawiki_database:/var/lib/mysql
