@@ -18,9 +18,8 @@ services:
     volumes:
       # Uploaded files
       - mediawiki_images:/var/www/html/images
-
-      # Add this AFTER completing the initial MediaWiki installer.
-      # - /opt/simtwiki/LocalSettings.php:/var/www/html/LocalSettings.php:ro
+      # LocalSettings.php
+      - /opt/simtwiki/LocalSettings.php:/var/www/html/LocalSettings.php:ro
 
     networks:
       - mediawiki
