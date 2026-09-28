@@ -22,6 +22,14 @@ RUN curl -fsSL \
         | tar -xz \
     && mv mediawiki-extensions-PageForms-6.0.11 PageForms
 
+# MediaWiki Language Extension Bundle
+RUN curl -fsSL \
+    https://translatewiki.net/mleb/MediaWikiLanguageExtensionBundle-2026.09.tar.bz2 \
+    -o /tmp/mleb.tar.bz2 \
+    && tar -xjf /tmp/mleb.tar.bz2 -C /tmp \
+    && cp -r /tmp/MediaWikiLanguageExtensionBundle-2026.09/extensions/* /var/www/html/extensions/ \
+    && rm -rf /tmp/mleb*
+
 # Extensions tied more closely to the MediaWiki release
 RUN git clone \
         --depth 1 \
